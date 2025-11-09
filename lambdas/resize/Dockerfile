@@ -12,5 +12,5 @@ COPY pyproject.toml ${LAMBDA_TASK_ROOT}/
 ENV PYTHONPATH="${LAMBDA_TASK_ROOT}/.venv/lib/python3.13/site-packages"
 
 # set the CMD to your handler
-CMD [ "handler.exif_handler"]
+CMD [ "handler.resize_handler"]
 
