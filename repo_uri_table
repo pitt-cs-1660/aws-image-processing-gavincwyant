@@ -1,0 +1,7 @@
+---------------------------------------------------------------------------------------
+|                                DescribeRepositories                                 |
++------------------+------------------------------------------------------------------+
+|  resize-lambda   |  425693140280.dkr.ecr.us-east-2.amazonaws.com/resize-lambda      |
+|  greyscale-lambda|  425693140280.dkr.ecr.us-east-2.amazonaws.com/greyscale-lambda   |
+|  exif-lambda     |  425693140280.dkr.ecr.us-east-2.amazonaws.com/exif-lambda        |
++------------------+------------------------------------------------------------------+
