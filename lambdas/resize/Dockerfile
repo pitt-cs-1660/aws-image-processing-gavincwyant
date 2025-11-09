@@ -7,9 +7,13 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 COPY pyproject.toml ${LAMBDA_TASK_ROOT}/
 
 # the rest of your Dockerfile
+COPY handler.py ${LAMBDA_TASK_ROOT}/
 
 # set PYTHONPATH to include the virtual environment site-packages
 ENV PYTHONPATH="${LAMBDA_TASK_ROOT}/.venv/lib/python3.13/site-packages"
+
+ENV PYTHONPATH="${LAMBDA_TASK_ROOT}/.venv/lib/python3.13/site-packages:${LAMBDA_TASK_ROOT}"
+
 
 # set the CMD to your handler
 CMD [ "handler.resize_handler"]
