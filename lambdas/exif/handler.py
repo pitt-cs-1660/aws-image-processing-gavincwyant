@@ -46,11 +46,32 @@ def exif_handler(event, context):
 
                     print(f"Processing: s3://{bucket_name}/{object_key}")
 
-                    ######
-                    #
-                    #  TODO: add exif lambda code here
-                    #
-                    ######
+                    # Download image from S3
+                    image = download_from_s3(bucket_name, object_key)
+
+                    # Extract EXIF data
+                    exif_data = {}
+                    if hasattr(image, '_getexif') and image._getexif():
+                        from PIL.ExifTags import TAGS
+                        raw_exif = image._getexif()
+                        for tag_id, value in raw_exif.items():
+                            tag_name = TAGS.get(tag_id, tag_id)
+                            # Convert bytes to string for JSON serialization
+                            if isinstance(value, bytes):
+                                try:
+                                    value = value.decode('utf-8', errors='ignore')
+                                except:
+                                    value = str(value)
+                            exif_data[str(tag_name)] = str(value)
+
+                    # Build output key: exif/filename.jpg -> processed/exif/filename.json
+                    filename = Path(object_key).stem  # get filename without extension
+                    output_key = f"processed/exif/{filename}.json"
+
+                    # Upload EXIF data as JSON to S3
+                    exif_json = json.dumps(exif_data, indent=2)
+                    upload_to_s3(bucket_name, output_key, exif_json, content_type='application/json')
+                    print(f"Uploaded EXIF data to s3://{bucket_name}/{output_key}")
 
                     processed_count += 1
 

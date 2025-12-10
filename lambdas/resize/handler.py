@@ -46,11 +46,19 @@ def resize_handler(event, context):
 
                     print(f"Processing: s3://{bucket_name}/{object_key}")
 
-                    ######
-                    #
-                    #  TODO: add resize lambda code here
-                    #
-                    ######
+                    # Download image from S3
+                    image = download_from_s3(bucket_name, object_key)
+
+                    # Resize image to 128x128
+                    resized_image = image.resize((128, 128), Image.Resampling.LANCZOS)
+
+                    # Build output key: resize/filename.jpg -> processed/resize/filename.jpg
+                    filename = Path(object_key).name
+                    output_key = f"processed/resize/{filename}"
+
+                    # Upload resized image to S3
+                    upload_to_s3(bucket_name, output_key, resized_image)
+                    print(f"Uploaded resized image to s3://{bucket_name}/{output_key}")
 
                     processed_count += 1
 
